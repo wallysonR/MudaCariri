@@ -1,5 +1,5 @@
 {% extends 'base.html'%}
-
+{% load crispy_forms_tags %}
 {% block content %}
 <!-- <section>
   <form method="POST" class="form">
@@ -41,6 +41,9 @@
     <label>Rua</label>
     <input type="text" class="form-control" name="rua"  placeholder="Enter Username">
   </div>
+
+  {{ form.cidade|as_crispy_field }}
+
   <button type="submit" class="btn btn-primary" name="action">Submit</button>
 </form>
 
