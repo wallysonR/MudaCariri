@@ -10,4 +10,5 @@ urlpatterns = [
     path('deslogar/',deslogar,name="deslogar"),
     path('',home,name='home'),
     path('index',index),
+    path('registrar_anuncio/',registrar_anuncio,name="registrar_anuncio"),
 ]
