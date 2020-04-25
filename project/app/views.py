@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import ModelForm
 from app.models import Perfil
+from .forms import *
+
 
 # Create your views here.
 
@@ -17,6 +19,7 @@ class PerfilForm(ModelForm):
         fields = ['rua','cidade']
 
 def registrar_usuario(request,template_name="registrar.html"):
+    form = PerfilForm(request.POST or None)
     if request.method=="POST":
         name = request.POST['username']
         email = request.POST['email']
@@ -28,7 +31,23 @@ def registrar_usuario(request,template_name="registrar.html"):
         perfil = Perfil.objects.create(rua=rua_requesicao,cidade=cidade_requisicao,usuario=user)
         perfil.save()
         return redirect('/listar_usuario/')
-    return render(request, template_name, {})
+    return render(request, template_name, {'form':form})
+class AnuncioForm(ModelForm):
+    class Meta:
+        model = Anuncio
+        fields = ['nome','descricao']
+
+def registrar_anuncio(request,template_name="registrar_anuncio.html"):
+    form = AnuncioForm(request.POST or None)
+    if request.method=="POST":
+        nome_planta = request.POST['nome']
+        descricao_planta = request.POST['descricao']
+        us = Perfil.objects.get(id = request.user.id)
+        anuncio = Anuncio.objects.create(nome=nome_planta,descricao=descricao_planta,perfil=us)
+        anuncio.save()
+        return HttpResponse("sucesso !")
+    return render(request,template_name,{'form':form})
+        
 
 
 # @login_required
