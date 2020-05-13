@@ -48,7 +48,11 @@ def registrar_anuncio(request,template_name="registrar_anuncio.html"):
         anuncio.save()
         return HttpResponse("sucesso !")
     return render(request,template_name,{'form':form})
-        
+
+def listar_anuncio(request, template_name="listar_anuncio.html"):
+    anuncios = Anuncio.objects.all()
+    anuncio = {'lista':anuncios}
+    return render(request,template_name,anuncio)        
 
 
 # @login_required
