@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect
 from django.forms import ModelForm
-from app.models import Perfil
+from .models import Perfil
 from .forms import *
 
 
@@ -32,6 +32,7 @@ def registrar_usuario(request,template_name="registrar.html"):
         perfil.save()
         return redirect('/listar_usuario/')
     return render(request, template_name, {'form':form})
+
 class AnuncioForm(ModelForm):
     class Meta:
         model = Anuncio
@@ -42,8 +43,8 @@ def registrar_anuncio(request,template_name="registrar_anuncio.html"):
     if request.method=="POST":
         nome_planta = request.POST['nome']
         descricao_planta = request.POST['descricao']
-        us = Perfil.objects.get(id = request.user.id)
-        anuncio = Anuncio.objects.create(nome=nome_planta,descricao=descricao_planta,perfil=us)
+        usuario1 = Perfil.objects.get(usuario_id = request.user.id)
+        anuncio = Anuncio.objects.create(nome=nome_planta,descricao=descricao_planta,perfil=usuario1)
         anuncio.save()
         return HttpResponse("sucesso !")
     return render(request,template_name,{'form':form})
