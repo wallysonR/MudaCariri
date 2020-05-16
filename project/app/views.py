@@ -46,7 +46,7 @@ def registrar_usuario(request,template_name="form_usuario.html"):
         user.save()
         perfil = Perfil.objects.create(rua=rua_requesicao,cidade=cidade_requisicao,usuario=user)
         perfil.save()
-        return redirect('/listar_usuario/')
+        return redirect('/login')
     return render(request, template_name, {'form':form})
 
 # TODO EDITAR_USUARIO(PERFIL),EXCLUIR_USUARIO(PERFIL) 
@@ -82,7 +82,7 @@ def registrar_anuncio(request,template_name="form_anuncio.html"):
         usuario1 = Perfil.objects.get(usuario_id = request.user.id)
         anuncio = Anuncio.objects.create(nome=nome_planta,descricao=descricao_planta,perfil=usuario1)
         anuncio.save()
-        return HttpResponse("sucesso !")
+        return redirect('listar_anuncio')
     return render(request,template_name,{'form':form})
 
 @login_required
@@ -102,6 +102,20 @@ def editar_anuncio(request,pk ,template_name='form_anuncio.html'):
     else:
         form = AnuncioForm(instance=anuncio)
     return render(request,template_name,{'form': form})
+
+@login_required
+def deletar_anuncio(request,pk, template_name='delete_anuncio.html'):
+    anuncio = get_object_or_404(Anuncio, pk=pk)
+    if request.method == "POST":
+        anuncio.ativo = False
+        anuncio.save()
+        return redirect('listar_anuncio')
+    return render(request,template_name,{'anuncio':anuncio})
+
+
+
+
+
 
 
 

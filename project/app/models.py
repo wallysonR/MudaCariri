@@ -15,8 +15,7 @@ class Perfil(models.Model):
         ('barbalha', 'Barbalha'),
     )
     rua = models.CharField(null=False, max_length=20)
-    cidade = models.CharField(
-        null=False, choices=CIDADE_CHOICES, max_length=20)
+    cidade = models.CharField(null=False, choices=CIDADE_CHOICES, max_length=20)
     usuario = models.OneToOneField(User, on_delete=models.PROTECT,related_name="perfil")
 
     def __str__(self):
@@ -28,6 +27,6 @@ class Anuncio(models.Model):
     descricao = models.TextField(max_length=200, null=False)
     data = models.DateTimeField(auto_now=True, null=False)
     perfil = models.ForeignKey(Perfil,on_delete=models.CASCADE, default = 0)
-    
+    ativo = models.BooleanField(default=True,null=False)    
     def __str__(self):
         return self.nome
