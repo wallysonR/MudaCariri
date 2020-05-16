@@ -11,14 +11,30 @@ from .models import Perfil
 from .forms import *
 
 
-# Create your views here.
+# FORMS
 
 class PerfilForm(ModelForm):
     class Meta:
         model = Perfil
         fields = ['rua','cidade']
 
-def registrar_usuario(request,template_name="registrar.html"):
+class AnuncioForm(ModelForm):
+    class Meta:
+        model = Anuncio
+        fields = ['nome','descricao']
+
+
+#HOME
+
+
+def home(request, template_name='home.html'):
+    return render(request, template_name)
+
+
+#USUARIO
+
+
+def registrar_usuario(request,template_name="form_usuario.html"):
     form = PerfilForm(request.POST or None)
     if request.method=="POST":
         name = request.POST['username']
@@ -33,11 +49,31 @@ def registrar_usuario(request,template_name="registrar.html"):
         return redirect('/listar_usuario/')
     return render(request, template_name, {'form':form})
 
-class AnuncioForm(ModelForm):
-    class Meta:
-        model = Anuncio
-        fields = ['nome','descricao']
+# TODO EDITAR_USUARIO(PERFIL),EXCLUIR_USUARIO(PERFIL) 
 
+def logar_usuario(request, template_name='login.html'):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect(home)
+        else:
+            messages.error(request, 'Usuário ou senha incorretos.')
+            return HttpResponseRedirect(settings.LOGIN_URL)
+    return render(request, template_name, {'redirect_to': home})
+
+def deslogar(request):
+    logout(request)
+    return redirect(home)
+
+ 
+ 
+ # ANUNCIO
+
+
+@login_required
 def registrar_anuncio(request,template_name="form_anuncio.html"):
     form = AnuncioForm(request.POST or None)
     if request.method=="POST":
@@ -49,11 +85,13 @@ def registrar_anuncio(request,template_name="form_anuncio.html"):
         return HttpResponse("sucesso !")
     return render(request,template_name,{'form':form})
 
+@login_required
 def listar_anuncio(request, template_name="listar_anuncio.html"):
     anuncios = Anuncio.objects.all()
     anuncio = {'lista':anuncios}
     return render(request,template_name,anuncio)      
 
+@login_required
 def editar_anuncio(request,pk ,template_name='form_anuncio.html'):
     anuncio = get_object_or_404(Anuncio, pk=pk)
     if request.method == "POST":
@@ -67,80 +105,3 @@ def editar_anuncio(request,pk ,template_name='form_anuncio.html'):
 
 
 
-
-# @login_required
-# def registrar_usuario(request, template_name="registrar.html"):
-#     user = request.user
-#     if user.is_staff:
-#         if request.method == "POST":
-#             username = request.POST['username']
-#             email = request.POST['email']
-#             password = request.POST['password']
-#             tipo = request.POST['tipo_usuario']
-#             if tipo == "administrador":
-#                 user = User.objects.create_user(username, email, password)
-#                 user.is_staff = True
-#                 user.save()
-#             else:
-#                 user = User.objects.create_user(username, email, password)
-
-#             return redirect('/listar_usuario/')
-#     else:
-#         messages.error(request, 'Permissão negada.')
-#         return redirect('/listar_usuario/')
-
-#     return render(request, template_name, {})
-
-
-@login_required
-def listar_usuario(request, template_name="listar.html"):
-    usuarios = User.objects.all()
-    usuario = {'lista': usuarios}
-    return render(request, template_name, usuario)
-
-
-def logar_usuario(request, template_name='login.html'):
-    # next = request.GET.get('listar_usuario')
-    if request.method == 'POST':
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(username=username, password=password)
-        if user is not None:
-            login(request, user)
-            return redirect(home)
-        else:
-            messages.error(request, 'Usuário ou senha incorretos.')
-            return HttpResponseRedirect(settings.LOGIN_URL)
-
-    return render(request, template_name, {'redirect_to': home})
-
-
-@login_required
-def deletar_usuario(request, pk, template_name='delete.html'):
-    user = request.user
-    if user.has_perm('user.delete_user'):
-        try:
-            usuario = User.objects.get(pk=pk)
-            if request.method == 'POST':
-                usuario.delete()
-                return redirect('listar_usuario')
-        except:
-            messages.error(request, 'Usuario não encontrado')
-            return redirect('listar_usuario')
-    else:
-        messages.error(request, 'Permissão negada')
-        return redirect('listar_usuario')
-    return render(request, template_name, {'usuario': usuario})
-
-
-def deslogar(request):
-    logout(request)
-    return redirect(home)
-
-
-def home(request, template_name='home.html'):
-    return render(request, template_name)
-
-
-def index(request):
-    return HttpResponse("Hello, world. You're at the polls index.")
