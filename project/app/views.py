@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,get_object_or_404
 from django.forms import ModelForm
 from .models import Perfil
 from .forms import *
@@ -38,7 +38,7 @@ class AnuncioForm(ModelForm):
         model = Anuncio
         fields = ['nome','descricao']
 
-def registrar_anuncio(request,template_name="registrar_anuncio.html"):
+def registrar_anuncio(request,template_name="form_anuncio.html"):
     form = AnuncioForm(request.POST or None)
     if request.method=="POST":
         nome_planta = request.POST['nome']
@@ -52,7 +52,20 @@ def registrar_anuncio(request,template_name="registrar_anuncio.html"):
 def listar_anuncio(request, template_name="listar_anuncio.html"):
     anuncios = Anuncio.objects.all()
     anuncio = {'lista':anuncios}
-    return render(request,template_name,anuncio)        
+    return render(request,template_name,anuncio)      
+
+def editar_anuncio(request,pk ,template_name='form_anuncio.html'):
+    anuncio = get_object_or_404(Anuncio, pk=pk)
+    if request.method == "POST":
+        form = AnuncioForm(request.POST, instance=anuncio)
+        if form.is_valid():
+            form.save()
+            return redirect('listar_anuncio')
+    else:
+        form = AnuncioForm(instance=anuncio)
+    return render(request,template_name,{'form': form})
+
+
 
 
 # @login_required

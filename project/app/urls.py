@@ -12,4 +12,5 @@ urlpatterns = [
     path('index',index),
     path('registrar_anuncio/',registrar_anuncio,name="registrar_anuncio"),
     path('listar_anuncio/',listar_anuncio,name="listar_anuncio"),
+    path('editar_anuncio/<int:pk>/',editar_anuncio,name="editar_anuncio")
 ]
