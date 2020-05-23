@@ -87,20 +87,24 @@ def registrar_anuncio(request,template_name="form_anuncio.html"):
 
 @login_required
 def listar_anuncio(request, template_name="listar_anuncio.html"):
-    anuncios = Anuncio.objects.all()
+    anuncios = Anuncio.objects.filter(ativo = True)
     anuncio = {'lista':anuncios}
     return render(request,template_name,anuncio)      
 
+#TODO adaptar para o novo metodo de exclusão
 @login_required
 def editar_anuncio(request,pk ,template_name='form_anuncio.html'):
     anuncio = get_object_or_404(Anuncio, pk=pk)
-    if request.method == "POST":
-        form = AnuncioForm(request.POST, instance=anuncio)
-        if form.is_valid():
-            form.save()
-            return redirect('listar_anuncio')
+    if anuncio.ativo == False:
+        return HttpResponse ('Esse anuncio está desativado')
     else:
-        form = AnuncioForm(instance=anuncio)
+        if request.method == "POST":
+            form = AnuncioForm(request.POST, instance=anuncio)
+            if form.is_valid():
+                form.save()
+                return redirect('listar_anuncio')
+        else:
+            form = AnuncioForm(instance=anuncio)
     return render(request,template_name,{'form': form})
 
 @login_required
