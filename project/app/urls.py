@@ -4,6 +4,7 @@ from django.urls import include, path
 urlpatterns = [
     path('',home,name='home'),
     path('registrar_usuario/', registrar_usuario, name='registrar_usuario'),
+    path('deletar_usuario/<int:pk>/',deletar_usuario,name='deletar_usuario'),
     path('login/',logar_usuario,name='login'),
     path('login/',logar_usuario),
     path('deslogar/',deslogar,name="deslogar"),

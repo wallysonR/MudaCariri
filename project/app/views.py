@@ -10,6 +10,7 @@ from django.forms import ModelForm
 from .models import Perfil
 from .forms import *
 
+# todo Gerenciador de mensagens try catch
 
 # FORMS
 
@@ -50,6 +51,27 @@ def registrar_usuario(request,template_name="form_usuario.html"):
     return render(request, template_name, {'form':form})
 
 # TODO EDITAR_USUARIO(PERFIL),EXCLUIR_USUARIO(PERFIL) 
+# def editar_usuario(request,pk,template_name="form_usuario.html"):
+#     perfil = get_object_or_404(Perfil,pk=pk)
+#     usuario = get_object_or_404(User, pk = perfil.usuario_id)
+#     if usuario.is_activate:
+#         if request.method_is == "POST":
+#             form_perfil = PerfilForm(request.POST, instance=perfil)
+#             form_usuario = 
+#             if form.is_valid():
+#                 form.save()
+                
+def deletar_usuario(request,pk, template_name="delete.html"):
+    perfil = get_object_or_404(Perfil,pk = pk)
+    usuario = get_object_or_404(User, id = perfil.usuario_id)
+    if request.method == "POST":
+        usuario.is_active = False
+        usuario.save()
+        return HttpResponse("Usuario deletado com sucesso!")
+    else:
+        return render(request,template_name,{'usuario':usuario})
+
+
 
 def logar_usuario(request, template_name='login.html'):
     if request.method == 'POST':
@@ -91,11 +113,11 @@ def listar_anuncio(request, template_name="listar_anuncio.html"):
     anuncio = {'lista':anuncios}
     return render(request,template_name,anuncio)      
 
-#TODO adaptar para o novo metodo de exclusão
 @login_required
 def editar_anuncio(request,pk ,template_name='form_anuncio.html'):
     anuncio = get_object_or_404(Anuncio, pk=pk)
     if anuncio.ativo == False:
+        #TODO mudar para uma subclasse do HTTPRESPONSE 
         return HttpResponse ('Esse anuncio está desativado')
     else:
         if request.method == "POST":
