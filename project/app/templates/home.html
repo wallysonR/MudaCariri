@@ -3,7 +3,38 @@
 {% block content %}
 
 <div class="container">
-<h1>Olá mundo !</h1>
+    <div class="row">
+        <div class="col">
+            <div class="card w-75">
+                <div class="card-body">
+                    <h5 class="card-title">Registrar Usuario</h5>
+                    <p class="card-text">Cadastrar um novo usuario</p>
+                    <a href="{% url 'registrar_usuario' %}" class="btn btn-primary">Cadastrar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card w-75">
+                <div class="card-body">
+                    <h5 class="card-title">Registrar Anuncio</h5>
+                    <p class="card-text">Cadastrar um novo anuncio</p>
+                    <a href="{% url 'registrar_anuncio' %}" class="btn btn-primary">Cadastrar</a>
+                </div>
+            </div>
+        </div>
+        <div class="col">
+            <div class="card w-75">
+                <div class="card-body">
+                    <h5 class="card-title">Listar Anuncios</h5>
+                    <p class="card-text">listar todos os anuncios</p>
+                    <a href="{% url 'listar_anuncio' %}" class="btn btn-primary">Listar</a>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
 </div>
 
 {% endblock content %}
