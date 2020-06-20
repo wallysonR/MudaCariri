@@ -120,3 +120,8 @@ def deletar_anuncio(request, pk, template_name='delete_anuncio.html'):
         anuncio.save()
         return redirect('listar_anuncio')
     return render(request, template_name, {'anuncio': anuncio})
+
+@login_required
+def perfil_anuncio(request,pk,template_name='perfil_anuncio.html'):
+    anuncio = get_object_or_404(Anuncio,pk=pk)
+    return render(request,template_name,{'anuncio':anuncio})

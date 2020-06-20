@@ -16,7 +16,11 @@
     <tbody>
       {% for anuncio in lista %}
       <tr>
-        <td>{{ anuncio.nome }}</td>
+        <td>
+          <a href="{% url 'perfil_anuncio' pk=anuncio.pk %}">
+            <i class="material-icons">{{ anuncio.nome }}</i>
+          </a>
+        </td>
         <td>{{ anuncio.descricao }}</td>
         <td>{{ anuncio.perfil }}</td>
         <td>
