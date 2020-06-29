@@ -80,9 +80,10 @@ def registrar_anuncio(request, template_name="form_anuncio.html"):
     if request.method == "POST":
         nome_planta = request.POST['nome']
         descricao_planta = request.POST['descricao']
+        foto = request.POST['foto']
         usuario1 = Perfil.objects.get(usuario_id=request.user.id)
         anuncio = Anuncio.objects.create(
-            nome=nome_planta, descricao=descricao_planta, perfil=usuario1)
+            nome=nome_planta, descricao=descricao_planta,foto_capa = foto, perfil=usuario1)
         anuncio.save()
         return redirect('listar_anuncio')
     return render(request, template_name, {'form': form})

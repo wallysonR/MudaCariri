@@ -26,6 +26,7 @@ class Anuncio(models.Model):
     nome = models.CharField(max_length=20, null=False)
     descricao = models.TextField(max_length=200, null=False)
     data = models.DateTimeField(auto_now=True, null=False)
+    foto_capa = models.ImageField(upload_to='media/imagens')
     perfil = models.ForeignKey(Perfil,on_delete=models.CASCADE, default = 0)
     ativo = models.BooleanField(default=True,null=False)    
     def __str__(self):
