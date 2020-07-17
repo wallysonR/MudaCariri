@@ -28,6 +28,21 @@ class Anuncio(models.Model):
     data = models.DateTimeField(auto_now=True, null=False)
     foto_capa = models.ImageField(upload_to='media/imagens')
     perfil = models.ForeignKey(Perfil,on_delete=models.CASCADE, default = 0)
-    ativo = models.BooleanField(default=True,null=False)    
+    ativo = models.BooleanField(default=True,null=False)
+    quantidade = models.IntegerField(default=0, null=False)   
     def __str__(self):
         return self.nome
+
+class Transacao(models.Model):
+    STATUS_CHOICES = (
+        ('pendente','Pendente'),
+        ('aceito','Aceito'),
+        ('recusado','Recusado'),
+    )
+    anuncio = models.ForeignKey(Anuncio,on_delete=models.CASCADE,null= False)
+    adotante = models.ForeignKey(Perfil,on_delete=models.CASCADE,null= False)
+    quantidade = models.IntegerField(default=1,null= False)
+    status = models.CharField(null=False, choices = STATUS_CHOICES,max_length=20)
+    def __str__(self):
+        return self.anuncio.nome
+

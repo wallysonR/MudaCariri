@@ -14,10 +14,12 @@
         <ul class="list-group">
             <li class="list-group-item">Nome: {{anuncio.nome}}</li>
             <li class="list-group-item">Descrição: {{anuncio.descricao}}</li>
+            <li class="list-group-item">Quantidade: {{anuncio.quantidade}}</li>
             <li class="list-group-item">Autor:{{anuncio.perfil}}</li>
             <li class="list-group-item">Data de Publicação: {{anuncio.data}}</li>
 
         </ul>
+        <a href="{% url 'solicitar_transacao' pk=anuncio.pk %}"> Eu quero </a>
     </div>
 </div>
 

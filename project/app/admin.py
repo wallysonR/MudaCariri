@@ -6,3 +6,4 @@ from django.contrib.auth.models import User
 
 admin.site.register(Perfil)
 admin.site.register(Anuncio)
+admin.site.register(Transacao)

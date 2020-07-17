@@ -7,7 +7,7 @@ from django.http import HttpResponse
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.forms import ModelForm
-from .models import Perfil, Anuncio
+from .models import Perfil, Anuncio, Transacao
 from .forms import Perfil
 
 
@@ -20,7 +20,7 @@ class PerfilForm(ModelForm):
 class AnuncioForm(ModelForm):
     class Meta:
         model = Anuncio
-        fields = ['nome', 'descricao']
+        fields = ['nome', 'descricao','quantidade']
 
 
 def home(request, template_name='home.html'):
@@ -81,19 +81,25 @@ def registrar_anuncio(request, template_name="form_anuncio.html"):
         nome_planta = request.POST['nome']
         descricao_planta = request.POST['descricao']
         foto = request.POST['foto']
+        qtd= request.POST['quantidade']
         usuario1 = Perfil.objects.get(usuario_id=request.user.id)
         anuncio = Anuncio.objects.create(
-            nome=nome_planta, descricao=descricao_planta,foto_capa = foto, perfil=usuario1)
+        nome=nome_planta, descricao=descricao_planta,foto_capa = foto ,perfil=usuario1, quantidade = qtd)
         anuncio.save()
         return redirect('listar_anuncio')
     return render(request, template_name, {'form': form})
-
 
 @login_required
 def listar_anuncio(request, template_name="listar_anuncio.html"):
     anuncios = Anuncio.objects.filter(ativo=True)
     anuncio = {'lista': anuncios}
     return render(request, template_name, anuncio)
+@login_required
+def listar_anuncio_usuario(request,template_name="listar_anuncio.html"):
+    perfil1 = Perfil.objects.get(usuario_id=request.user.id)
+    anuncios = Anuncio.objects.filter(perfil=perfil1)
+    anuncio = {'lista':anuncios}
+    return render(request, template_name,anuncio)
 
 
 @login_required
@@ -126,3 +132,17 @@ def deletar_anuncio(request, pk, template_name='delete_anuncio.html'):
 def perfil_anuncio(request,pk,template_name='perfil_anuncio.html'):
     anuncio = get_object_or_404(Anuncio,pk=pk)
     return render(request,template_name,{'anuncio':anuncio})
+
+@login_required
+def solicitar_transacao(request,pk,template_name='solicitar_item.html'):
+    anuncio = get_object_or_404(Anuncio,pk=pk)
+    if request.method == 'POST':
+        adotante = Perfil.objects.get(usuario_id=request.user.id)
+        quantidade_requerida = request.POST['qtd']
+        status = 'pendente'
+        transacao = Transacao.objects.create(anuncio=anuncio,adotante=adotante,quantidade=quantidade_requerida,status = status)
+        transacao.save()
+        return redirect('listar_anuncio')
+    return render(request, template_name,{ 'anuncio':anuncio})
+        
+

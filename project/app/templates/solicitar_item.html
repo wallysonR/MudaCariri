@@ -1,0 +1,14 @@
+{% extends 'base.html'%}
+{% block content %}
+
+<form method="POST">
+    {% csrf_token %}
+   <h3>{{anuncio.nome}}</h3>
+    <div class="form-group">
+      <label>Quanto deseja solicitar ?</label>
+      <input type="number" class="form-control" name="qtd" placeholder="Quantidade">
+    </div>
+    <button type="submit" class="btn btn-primary" name="action">Solicitar</button>
+  </form>
+  
+  {% endblock content %}
