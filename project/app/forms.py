@@ -12,3 +12,7 @@ class PerfilForm(forms.ModelForm):
         model = Perfil
         fields = ['rua', 'cidade']
 
+class TransacaoForm(forms.ModelForm):
+    class Meta:
+        model= Transacao
+        fields = ['anuncio','adotante','quantidade','status']

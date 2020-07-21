@@ -15,5 +15,10 @@ urlpatterns = [
     path('editar_anuncio/<int:pk>/',editar_anuncio,name="editar_anuncio"),
     path('deletar_anuncio/<int:pk>/',deletar_anuncio,name="deletar_anuncio"),
     path('perfil_anuncio/<int:pk>/',perfil_anuncio,name='perfil_anuncio'),
-    path('solicitar_transacao/<int:pk>/',solicitar_transacao,name='solicitar_transacao')
+    path('solicitar_transacao/<int:pk>/',solicitar_transacao,name='solicitar_transacao'),
+    path('listar_transacao/',listar_transacao,name='listar_transacao'),
+    path('minhas_transacoes/',minhas_transacoes,name='minhas_transacoes'),
+    # path('mudar_status/<int:pk>',mudar_status,name='mudar_status'),
+    path('teste/<int:pk>/',solicitar_transacao2,name='solicitar_transacao2'),
+    path('editar_solicitacao/<int:pk>',editar_solicitacao),
 ]+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

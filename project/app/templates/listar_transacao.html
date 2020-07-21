@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="GET">
+
+    <a href="{% url 'listar_anuncio_usuario' %}">Meus</a>
+
+</form>
+<div class="col-lg-12">
+    <table class="table table-dark">
+        <thead>
+            <tr>
+                <th>Anuncio</th>
+                <th>Adotante</th>
+                <th>Quantidade</th>
+                <th>Status</th>
+
+            </tr>
+        </thead>
+        <tbody>
+            {% for transacao in lista %}
+            <tr>
+                <td>{{ transacao.anuncio }}</td>
+                <td>{{ transacao.adotante }}</td>
+                <td>{{ transacao.quantidade }}</td>
+                <td>{{transacao.status}}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock content %}

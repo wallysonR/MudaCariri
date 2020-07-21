@@ -1,0 +1,10 @@
+{% extends 'base.html'%}
+{% block content %}{% csrf_token %}
+ <form action="submit">
+    <div class="form-group">
+        <label>Qual status?</label>
+        <input type="text" class="form-control" name="status" placeholder="status">
+      </div>
+      <button type="submit" class="btn btn-primary" name="action">Mudar</button>
+ </form>
+{% endblock content %}
